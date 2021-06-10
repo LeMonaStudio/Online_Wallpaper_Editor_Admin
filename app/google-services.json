@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "46332756521",
+    "project_id": "onlinewallpapereditor",
+    "storage_bucket": "onlinewallpapereditor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46332756521:android:cd3445c30ddf3834039238",
+        "android_client_info": {
+          "package_name": "com.thenativecitizens.onlinewallpapereditoradmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "46332756521-9kus9nfvglgk3slnt1d1h10sn00eo933.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZow0swjk2nYxtYfz9CR6R-TPR7RUjbjU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "46332756521-9kus9nfvglgk3slnt1d1h10sn00eo933.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

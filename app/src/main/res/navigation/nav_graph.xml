@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.thenativecitizens.onlinewallpapereditoradmin.ui.home.HomeFragment"
+        tools:layout="@layout/fragment_home"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_addMainDialog"
+            app:destination="@id/addMainDialog" />
+        <action
+            android:id="@+id/action_homeFragment_to_uploadFragment"
+            app:destination="@id/uploadFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/addMainDialog"
+        tools:layout="@layout/dialog_add_main"
+        android:name="com.thenativecitizens.onlinewallpapereditoradmin.ui.dialogs.AddMainDialog"
+        android:label="AddMainDialog" />
+    <fragment
+        android:id="@+id/uploadFragment"
+        tools:layout="@layout/fragment_upload"
+        android:name="com.thenativecitizens.onlinewallpapereditoradmin.ui.upload.UploadFragment"
+        android:label="UploadFragment" >
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
+        <argument android:name="subCategoryName" />
+    </fragment>
+</navigation>

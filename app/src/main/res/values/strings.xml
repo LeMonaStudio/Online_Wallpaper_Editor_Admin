@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Online Wallpaper &amp; Editor Admin</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="admin">Admin.</string>
+    <string name="add_image_fab_description">Add Image or Images</string>
+    <string name="all_categories_title_text">All Categories</string>
+    <string name="sub_category">Sub-category: %1$s</string>
+    <string name="new_category_dialog_title">New category</string>
+    <string name="category_name_prompt">Category Name</string>
+    <string name="add_btn_text">Add</string>
+    <string name="new_sub_category_dialog_title">New subcategory</string>
+    <string name="subcategory_name_prompt">Subcategory Name</string>
+    <string name="select_category_name_prompt">Select Category</string>
+    <string name="add_images_dialog_title">Add Images</string>
+    <string name="select_sub_category_name_prompt">Select SubCategory</string>
+    <string name="image_destination_prompt">Destination</string>
+    <string name="subcategory_not_required_check">subcategory not required</string>
+    <string name="continue_btn">Continue</string>
+    <string name="upload_images_title_text">Uploading Images</string>
+    <string name="upload_image_dialog_title">Upload Images</string>
+    <string name="start_upload_btn_text">Start Upload</string>
+    <string name="cancel_btn_text">Cancel</string>
+    <string name="images_destination_text">%1$s</string>
+    <string name="image_selected_count_prompt">You have selected %1$s images for upload.</string>
+    <string name="uploading_progress">%1$s</string>
+    <string name="progress_count">%1$s</string>
+    <string name="subcategories_title_text">SubCategories</string>
+    <string name="delete_dialog_title_text">Delete Items</string>
+    <string name="delete_is_dangerous_prompt">(Please note, these operations are dangerous and cannot be reversed. Do not click on delete if you don\'t mean to.)</string>
+    <string name="category_name_title_text">Category Name</string>
+</resources>
