@@ -19,10 +19,14 @@ import com.thenativecitizens.onlinewallpapereditoradmin.R
 import com.thenativecitizens.onlinewallpapereditoradmin.databinding.FragmentUploadBinding
 import com.thenativecitizens.onlinewallpapereditoradmin.ui.dialogs.UploadImageDialog
 import com.thenativecitizens.onlinewallpapereditoradmin.util.UploadedImage
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
+const val keyUploadImageDialog = "UPLOAD_IMAGE_DIALOG"
 
 
-
-class UploadFragment : Fragment() {
+@AndroidEntryPoint
+class UploadFragment @Inject constructor() : Fragment() {
 
     private lateinit var binding: FragmentUploadBinding
     private lateinit var uploadViewModel: UploadViewModel
@@ -32,8 +36,6 @@ class UploadFragment : Fragment() {
     //Fields for UI to determine if uploading is done
     private var uploadProgress = 0
     private var uploadTarget = 0
-
-    private val keyUploadImageDialog = "UPLOAD_IMAGE_DIALOG"
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

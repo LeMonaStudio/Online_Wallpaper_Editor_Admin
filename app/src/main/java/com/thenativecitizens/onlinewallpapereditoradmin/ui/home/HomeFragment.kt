@@ -17,22 +17,28 @@ import com.thenativecitizens.onlinewallpapereditoradmin.R
 import com.thenativecitizens.onlinewallpapereditoradmin.databinding.FragmentHomeBinding
 import com.thenativecitizens.onlinewallpapereditoradmin.ui.dialogs.*
 import com.thenativecitizens.onlinewallpapereditoradmin.util.Category
+import com.thenativecitizens.onlinewallpapereditoradmin.util.ListAndStringConverter
 import com.thenativecitizens.onlinewallpapereditoradmin.util.SubCategory
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
 
-class HomeFragment : Fragment() {
+const val keyAddMainDialog = "ADD_MAIN_DIALOG"
+const val keyAddCategoryDialog = "ADD_CATEGORY_DIALOG"
+const val keyAddSubCategoryDialog = "ADD_SUB_CATEGORY_DIALOG"
+const val keyAddImagesDialog = "ADD_IMAGES_DIALOG"
+const val keyDeleteDialog = "DELETE_DIALOG"
+
+
+@AndroidEntryPoint
+class HomeFragment @Inject constructor(): Fragment(){
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
-    private val keyAddMainDialog = "ADD_MAIN_DIALOG"
-    private val keyAddCategoryDialog = "ADD_CATEGORY_DIALOG"
-    private var keyAddSubCategoryDialog = "ADD_SUB_CATEGORY_DIALOG"
-    private var keyAddImagesDialog = "ADD_IMAGES_DIALOG"
-    private var keyDeleteDialog = "DELETE_DIALOG"
+
     private var listOfCategory: List<Category> = listOf()
     private var listOfCategoryNames: MutableList<String> = mutableListOf()
-
     //This is the category selected at any point by the User
     private lateinit var userSelectedCategory: Category
 
@@ -40,8 +46,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-
-        //instantiate the viewModel
+        //ViewModel
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         //Override onBackPressed for the back button
@@ -57,7 +62,7 @@ class HomeFragment : Fragment() {
             //launch the delete dialog
             val bundle = Bundle()
             bundle.putString("CategoryName", category.categoryName)
-            bundle.putString("SubCategories", category.subCategoryList.toStr())
+            bundle.putString("SubCategories", ListAndStringConverter.listToString(category.subCategoryList))
             val dialog = DeleteDialog()
             dialog.arguments = bundle
             dialog.show(parentFragmentManager, "DELETE_DIALOG")
@@ -155,7 +160,7 @@ class HomeFragment : Fragment() {
                                 //Launch the AddSubCategoryDialog
                                 val dialog = AddSubCategoryDialog()
                                 val bundle = Bundle()
-                                bundle.putString("CategoryNames", listOfCategoryNames.toStr())
+                                bundle.putString("CategoryNames", ListAndStringConverter.listToString(listOfCategoryNames))
                                 dialog.arguments = bundle
                                 dialog.show(parentFragmentManager, "ADD_SUB_CATEGORY_DIALOG")
                             } else{
@@ -167,7 +172,7 @@ class HomeFragment : Fragment() {
                                 //User wants to add images
                                 //Launch the AddImagesDialog
                                 val bundle = Bundle()
-                                bundle.putString("CategoryNames", listOfCategoryNames.toStr())
+                                bundle.putString("CategoryNames", ListAndStringConverter.listToString(listOfCategoryNames))
                                 val dialog = AddImagesDialog()
                                 dialog.arguments = bundle
                                 dialog.show(parentFragmentManager, "ADD_IMAGES_DIALOG")
@@ -237,10 +242,10 @@ class HomeFragment : Fragment() {
                 if (requestKey == keyDeleteDialog){
                     when(result.getInt("DeleteOption")){
                         1 -> {
-                            homeViewModel.onDeleteCategory(userSelectedCategory)
+                            homeViewModel.deleteCategory(userSelectedCategory)
                         }
                         2 -> {
-                            homeViewModel.onDeleteSubCategory(userSelectedCategory,
+                            homeViewModel.deleteSubCategory(userSelectedCategory,
                                 result.getString("SubCategoryName", ""))
                         }
                         else -> {
@@ -252,18 +257,5 @@ class HomeFragment : Fragment() {
         )
 
         return binding.root
-    }
-
-
-    private fun MutableList<String>.toStr(): String{
-        var str = ""
-        if(this.isNotEmpty()){
-            for (i in 0 until this.size){
-                str += this[i]
-                if (i != this.size -1)
-                    str += ","
-            }
-        }
-        return str
     }
 }

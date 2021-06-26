@@ -1,38 +1,25 @@
 package com.thenativecitizens.onlinewallpapereditoradmin.ui.home
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.database.*
-import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
+import com.thenativecitizens.onlinewallpapereditoradmin.data.FirebaseRepo
 import com.thenativecitizens.onlinewallpapereditoradmin.util.Category
 import com.thenativecitizens.onlinewallpapereditoradmin.util.SubCategory
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeViewModel(application: Application) : AndroidViewModel(application){
-
-    //Firebase Database references
-    private var categoryFirebaseDatabaseRef: DatabaseReference = Firebase.database.reference.child("categories")
-    private var sbCategoryFirebaseDatabaseRef: DatabaseReference = Firebase.database.reference.child("subcategories")
-
+@HiltViewModel
+class HomeViewModel @Inject constructor(application: Application, private val repository: FirebaseRepo) : AndroidViewModel(application){
 
     //This field will hold the list of categories
     private var _categoryList = MutableLiveData<MutableList<Category>>()
     val categoryList: LiveData<MutableList<Category>> get() = _categoryList
 
-    //Holds the data snapshot keys to be able to update the list of categories on childChanged
-    private var snapShotKeys: MutableList<String> = mutableListOf()
-
     //Observed to show a loading dialog to the user
     private var _showLoadingDialog = MutableLiveData<String>()
     val showLoadingDialog: LiveData<String> get() = _showLoadingDialog
-
-    //the current category been deleted or whose subCategory is been deleted
-    private lateinit var affectedCategory: Category
 
     init {
         _categoryList.value = mutableListOf()
@@ -40,7 +27,52 @@ class HomeViewModel(application: Application) : AndroidViewModel(application){
         fetchCategories()
     }
 
-    //Called to fetch the list of category Ids
+    /**Hilt powered functions
+     *
+     */
+
+    private fun fetchCategories(){
+        repository.fetchCategories {
+            _categoryList.value = it
+        }
+    }
+
+    fun addCategory(category: Category){
+        _showLoadingDialog.value = "Adding ${category.categoryName}"
+        repository.addCategory(category){
+            if (it || !it) _showLoadingDialog.value = ""
+        }
+    }
+
+    fun addSubCategory(subCategory: SubCategory, category: Category){
+        _showLoadingDialog.value = "Adding Subcategory: ${subCategory.subCategoryName}"
+        repository.addSubCategory(subCategory, category) {
+            if (it || !it) _showLoadingDialog.value = ""
+        }
+    }
+
+
+    fun deleteCategory(category: Category){
+        _showLoadingDialog.value = "Deleting ${category.categoryName}"
+        repository.deleteCategory(category){
+            if (it || !it) _showLoadingDialog.value = ""
+        }
+    }
+
+    fun deleteSubCategory(category: Category, subCategoryName: String){
+        _showLoadingDialog.value = "Deleting $subCategoryName"
+        repository.deleteSubCategory(category, subCategoryName){
+            if (it || !it) _showLoadingDialog.value = ""
+        }
+    }
+
+    /**
+     *
+     */
+
+
+
+    /*//Called to fetch the list of category Ids
     private fun fetchCategories() {
         categoryFirebaseDatabaseRef.addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -158,7 +190,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application){
         _showLoadingDialog.value = ""
     }
 
-
     //Called to delete subCategory
     fun onDeleteSubCategory(category: Category, subCategoryName: String){
         affectedCategory = category
@@ -170,7 +201,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application){
         //now fetch the subcategory and delete it
         getSubCategoryAndDelete(subCategoryName)
     }
-
 
     //called to get a new placeholder url for the category whose subcategory is been deleted
     private fun getNewCategoryPlaceHolderImageUrl(otherSubCategoryName: String) {
@@ -235,5 +265,5 @@ class HomeViewModel(application: Application) : AndroidViewModel(application){
 
                 override fun onCancelled(error: DatabaseError) {}
             })
-    }
+    }*/
 }

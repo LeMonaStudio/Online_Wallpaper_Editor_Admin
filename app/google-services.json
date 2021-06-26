@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "46332756521",
-    "project_id": "onlinewallpapereditor",
-    "storage_bucket": "onlinewallpapereditor.appspot.com"
+    "project_number": "525862647984",
+    "firebase_url": "https://photogalleryandeditor-default-rtdb.firebaseio.com",
+    "project_id": "photogalleryandeditor",
+    "storage_bucket": "photogalleryandeditor.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:46332756521:android:cd3445c30ddf3834039238",
+        "mobilesdk_app_id": "1:525862647984:android:3deb77c730e294977d2375",
         "android_client_info": {
           "package_name": "com.thenativecitizens.onlinewallpapereditoradmin"
         }
       },
       "oauth_client": [
         {
-          "client_id": "46332756521-9kus9nfvglgk3slnt1d1h10sn00eo933.apps.googleusercontent.com",
+          "client_id": "525862647984-9pu2qrrh72h8gbslr0e4ch0p8megifhc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBZow0swjk2nYxtYfz9CR6R-TPR7RUjbjU"
+          "current_key": "AIzaSyCHdwwYKIYO297DkgdjQjkv4oDJXuaCIwc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "46332756521-9kus9nfvglgk3slnt1d1h10sn00eo933.apps.googleusercontent.com",
+              "client_id": "525862647984-9pu2qrrh72h8gbslr0e4ch0p8megifhc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
