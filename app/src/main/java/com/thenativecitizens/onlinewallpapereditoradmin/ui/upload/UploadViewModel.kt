@@ -42,10 +42,12 @@ class UploadViewModel @Inject constructor(application: Application, private val 
     //Gets the current Category where the Images is been uploaded to
     //for future updating of the Image placeholder Url
     fun getCurrentCategory(categoryName: String){
-        repository.fetchCategories {
-            it.map { indexedCategory ->
-                if(indexedCategory.categoryName == categoryName)
-                    currentCategory = indexedCategory
+        uiScope.launch {
+            repository.fetchCategories {
+                it.map { indexedCategory ->
+                    if(indexedCategory.categoryName == categoryName)
+                        currentCategory = indexedCategory
+                }
             }
         }
     }
@@ -54,8 +56,10 @@ class UploadViewModel @Inject constructor(application: Application, private val 
     //Gets the current subCategory where the Images is been uploaded to
     //for future updating of the ImageUrl list
     fun getCurrentSubCategory(categoryName: String, subCategoryName: String){
-        repository.fetchSubCategoryByName(categoryName, subCategoryName){
-            currentSubCategory = it
+        uiScope.launch {
+            repository.fetchSubCategoryByName(categoryName, subCategoryName){
+                currentSubCategory = it
+            }
         }
     }
 
@@ -88,54 +92,27 @@ class UploadViewModel @Inject constructor(application: Application, private val 
         }
     }
 
-    /*private suspend fun uploadToStorage(index: Int, uploadedImage: UploadedImage, categoryName: String, subCategoryName: String){
-        withContext(Dispatchers.IO){
-            //Get an instance of the firebase storage
-            val storageRef: StorageReference = Firebase.storage.reference
-            uploadedImage.imageUri.let {thisUri ->
-                val imageStorageRef = storageRef.child("$categoryName/$subCategoryName/${uploadedImage.imageName}")
-                imageStorageRef.putFile(thisUri)
-                    .addOnProgressListener {
-                        //Show the Progress
-                        val currentProgress = ((100.0*it.bytesTransferred)/it.totalByteCount).toInt()
-                        uploadedImage.imageUploadProgress = currentProgress
-                        localUploadList[index] = uploadedImage
-                        _uploadedImageList.value = localUploadList
-                    }
-                    .addOnSuccessListener {
-                        //Get the download Url from Firebase storage
-                        imageStorageRef.downloadUrl.addOnSuccessListener {downloadUri ->
-                            //Save the Url to the SubCategory's image url list
-                            updateSubCategory(downloadUri.toString(), categoryName, subCategoryName)
-                        }
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(getApplication(), "Failed to upload ${uploadedImage.imageName}",
-                            Toast.LENGTH_SHORT).show()
-                    }
-            }
-        }
-    }*/
-
 
     //updates the current Subcategory in the database, with the new sets of image urls
     private fun updateSubCategory(imageUrl: String){
-        count++ //increase the count of successfully uploaded images
-        val list = currentSubCategory.imageUrlList
-        if (!list.contains(imageUrl)){
-            //Add the Image url if the list does not
-            //contain it to avoid repetition
-            list.add(imageUrl)
-            currentSubCategory.imageUrlList = list
-        }
-        if(count == localUploadList.size){
-            //Shuffle for a new subcategory image placeholder
-            currentSubCategory.subCategoryPlaceholderImageUrl = list.shuffled()[0]
-            //Shuffle for a new category image placeholder
-            currentCategory.categoryImagePlaceholderUrl = list.shuffled()[0]
-            //Update category with list of image urls
-            repository.onUploadCompleted(currentCategory, currentSubCategory, count)
-        }
+       uiScope.launch {
+           count++ //increase the count of successfully uploaded images
+           val list = currentSubCategory.imageUrlList
+           if (!list.contains(imageUrl)){
+               //Add the Image url if the list does not
+               //contain it to avoid repetition
+               list.add(imageUrl)
+               currentSubCategory.imageUrlList = list
+           }
+           if(count == localUploadList.size){
+               //Shuffle for a new subcategory image placeholder
+               currentSubCategory.subCategoryPlaceholderImageUrl = list.shuffled()[0]
+               //Shuffle for a new category image placeholder
+               currentCategory.categoryImagePlaceholderUrl = list.shuffled()[0]
+               //Update category with list of image urls
+               repository.onUploadCompleted(currentCategory, currentSubCategory, count)
+           }
+       }
     }
 
 
