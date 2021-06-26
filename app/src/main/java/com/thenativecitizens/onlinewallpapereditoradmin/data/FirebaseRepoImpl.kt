@@ -170,7 +170,7 @@ class FirebaseRepoImpl @Inject constructor(private val application: Application,
     }
 
     override fun fetchSubCategoryByName(categoryName: String, subCategoryName: String, callback: (SubCategory) -> Unit) {
-        databaseReference.child("subcategories").child(categoryName)
+        databaseReference.child("subcategories").child(categoryName).child(subCategoryName)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.getValue<SubCategory>()?.let {
