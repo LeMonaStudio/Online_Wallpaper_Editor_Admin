@@ -5,13 +5,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.thenativecitizens.onlinewallpapereditoradmin.data.FirebaseRepo
-import com.thenativecitizens.onlinewallpapereditoradmin.util.Category
-import com.thenativecitizens.onlinewallpapereditoradmin.util.SubCategory
+import com.thenativecitizens.onlinewallpapereditoradmin.model.Category
+import com.thenativecitizens.onlinewallpapereditoradmin.model.SubCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+
 @HiltViewModel
-class HomeViewModel @Inject constructor(application: Application, private val repository: FirebaseRepo) : AndroidViewModel(application){
+class HomeViewModel @Inject constructor(application: Application,
+                                        private val repository: FirebaseRepo) : AndroidViewModel(application){
 
     //This field will hold the list of categories
     private var _categoryList = MutableLiveData<MutableList<Category>>()
@@ -20,6 +22,7 @@ class HomeViewModel @Inject constructor(application: Application, private val re
     //Observed to show a loading dialog to the user
     private var _showLoadingDialog = MutableLiveData<String>()
     val showLoadingDialog: LiveData<String> get() = _showLoadingDialog
+
 
     init {
         _categoryList.value = mutableListOf()

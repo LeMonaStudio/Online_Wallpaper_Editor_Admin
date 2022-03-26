@@ -1,4 +1,4 @@
-package com.thenativecitizens.onlinewallpapereditoradmin.util
+package com.thenativecitizens.onlinewallpapereditoradmin.model
 
 data class SubCategory(
     var subCategoryID: String = "",

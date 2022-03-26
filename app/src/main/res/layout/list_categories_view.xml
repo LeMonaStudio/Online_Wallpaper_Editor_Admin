@@ -6,7 +6,7 @@
     <data>
         <variable
             name="category"
-            type="com.thenativecitizens.onlinewallpapereditoradmin.util.Category" />
+            type="com.thenativecitizens.onlinewallpapereditoradmin.model.Category" />
         <variable
             name="listener"
             type="com.thenativecitizens.onlinewallpapereditoradmin.ui.home.CategoryListListener" />

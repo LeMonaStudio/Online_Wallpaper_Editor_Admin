@@ -12,9 +12,9 @@ import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.thenativecitizens.onlinewallpapereditoradmin.util.Category
-import com.thenativecitizens.onlinewallpapereditoradmin.util.SubCategory
-import com.thenativecitizens.onlinewallpapereditoradmin.util.UploadedImage
+import com.thenativecitizens.onlinewallpapereditoradmin.model.Category
+import com.thenativecitizens.onlinewallpapereditoradmin.model.SubCategory
+import com.thenativecitizens.onlinewallpapereditoradmin.model.UploadedImage
 import org.json.JSONException
 import org.json.JSONObject
 import javax.inject.Inject

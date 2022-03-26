@@ -5,9 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.thenativecitizens.onlinewallpapereditoradmin.data.FirebaseRepo
-import com.thenativecitizens.onlinewallpapereditoradmin.util.Category
-import com.thenativecitizens.onlinewallpapereditoradmin.util.SubCategory
-import com.thenativecitizens.onlinewallpapereditoradmin.util.UploadedImage
+import com.thenativecitizens.onlinewallpapereditoradmin.model.Category
+import com.thenativecitizens.onlinewallpapereditoradmin.model.SubCategory
+import com.thenativecitizens.onlinewallpapereditoradmin.model.UploadedImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -79,7 +79,7 @@ class UploadViewModel @Inject constructor(application: Application, private val 
     }
 
     private suspend fun uploadToStorage(index: Int, uploadedImage: UploadedImage, categoryName: String,
-                                           subCategoryName: String){
+                                        subCategoryName: String){
         withContext(Dispatchers.IO){
             repository.uploadToStorage(index, uploadedImage, categoryName, subCategoryName,
                 { currentProgress ->

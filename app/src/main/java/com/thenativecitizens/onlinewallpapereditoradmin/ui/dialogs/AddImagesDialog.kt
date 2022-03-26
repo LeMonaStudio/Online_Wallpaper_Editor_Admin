@@ -18,7 +18,7 @@ import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.thenativecitizens.onlinewallpapereditoradmin.R
 import com.thenativecitizens.onlinewallpapereditoradmin.databinding.DialogAddImagesBinding
-import com.thenativecitizens.onlinewallpapereditoradmin.util.Category
+import com.thenativecitizens.onlinewallpapereditoradmin.model.Category
 
 
 class AddImagesDialog : DialogFragment() {

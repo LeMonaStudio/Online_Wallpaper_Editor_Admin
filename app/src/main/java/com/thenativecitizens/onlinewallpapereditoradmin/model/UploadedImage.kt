@@ -1,4 +1,4 @@
-package com.thenativecitizens.onlinewallpapereditoradmin.util
+package com.thenativecitizens.onlinewallpapereditoradmin.model
 
 import android.net.Uri
 

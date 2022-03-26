@@ -1,8 +1,8 @@
 package com.thenativecitizens.onlinewallpapereditoradmin.data
 
-import com.thenativecitizens.onlinewallpapereditoradmin.util.Category
-import com.thenativecitizens.onlinewallpapereditoradmin.util.SubCategory
-import com.thenativecitizens.onlinewallpapereditoradmin.util.UploadedImage
+import com.thenativecitizens.onlinewallpapereditoradmin.model.Category
+import com.thenativecitizens.onlinewallpapereditoradmin.model.SubCategory
+import com.thenativecitizens.onlinewallpapereditoradmin.model.UploadedImage
 
 interface FirebaseRepo {
     /**

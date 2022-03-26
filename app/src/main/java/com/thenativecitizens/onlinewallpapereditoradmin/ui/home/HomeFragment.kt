@@ -16,19 +16,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.thenativecitizens.onlinewallpapereditoradmin.R
 import com.thenativecitizens.onlinewallpapereditoradmin.databinding.FragmentHomeBinding
 import com.thenativecitizens.onlinewallpapereditoradmin.ui.dialogs.*
-import com.thenativecitizens.onlinewallpapereditoradmin.util.Category
-import com.thenativecitizens.onlinewallpapereditoradmin.util.ListAndStringConverter
-import com.thenativecitizens.onlinewallpapereditoradmin.util.SubCategory
+import com.thenativecitizens.onlinewallpapereditoradmin.model.Category
+import com.thenativecitizens.onlinewallpapereditoradmin.model.SubCategory
+import com.thenativecitizens.onlinewallpapereditoradmin.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
 
 
-const val keyAddMainDialog = "ADD_MAIN_DIALOG"
-const val keyAddCategoryDialog = "ADD_CATEGORY_DIALOG"
-const val keyAddSubCategoryDialog = "ADD_SUB_CATEGORY_DIALOG"
-const val keyAddImagesDialog = "ADD_IMAGES_DIALOG"
-const val keyDeleteDialog = "DELETE_DIALOG"
 
 
 @AndroidEntryPoint
@@ -97,12 +92,10 @@ class HomeFragment @Inject constructor(): Fragment(){
                 }
                 listOfCategoryNames = list
 
-                adapter.notifyDataSetChanged()
                 binding.executePendingBindings()
             } else {
                 //  binding.progressContainer.visibility = View.VISIBLE
-                adapter.data = mutableListOf<Category>()
-                adapter.notifyDataSetChanged()
+                adapter.data = mutableListOf()
                 binding.executePendingBindings()
             }
         }
@@ -143,118 +136,142 @@ class HomeFragment @Inject constructor(): Fragment(){
         //AddMainDialog
         parentFragmentManager.setFragmentResultListener(
             keyAddMainDialog,
-            viewLifecycleOwner,
-            {requestKey, result ->
-                if(requestKey == keyAddMainDialog){
-                    //Use the ClickAction to determine what to do with the action
-                    when(result.getString("ClickAction")){
-                        "Category" -> {
+            viewLifecycleOwner
+        ) { requestKey, result ->
+            if (requestKey == keyAddMainDialog) {
+                //Use the ClickAction to determine what to do with the action
+                when (result.getString("ClickAction")) {
+                    "Category" -> {
+                        //User wants to add a new category
+                        //Launch the AddCategoryDialog
+                        val dialog = AddCategoryDialog()
+                        dialog.show(parentFragmentManager, "ADD_CATEGORY_DIALOG")
+                    }
+                    "SubCategory" -> {
+                        if (listOfCategoryNames.isNotEmpty()) {
                             //User wants to add a new category
-                            //Launch the AddCategoryDialog
-                            val dialog = AddCategoryDialog()
-                            dialog.show(parentFragmentManager, "ADD_CATEGORY_DIALOG")
+                            //Launch the AddSubCategoryDialog
+                            val dialog = AddSubCategoryDialog()
+                            val bundle = Bundle()
+                            bundle.putString(
+                                "CategoryNames",
+                                ListAndStringConverter.listToString(listOfCategoryNames)
+                            )
+                            dialog.arguments = bundle
+                            dialog.show(parentFragmentManager, "ADD_SUB_CATEGORY_DIALOG")
+                        } else {
+                            Snackbar.make(
+                                binding.root,
+                                "To create a subcategory create a category",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
                         }
-                        "SubCategory" -> {
-                            if(listOfCategoryNames.isNotEmpty()){
-                                //User wants to add a new category
-                                //Launch the AddSubCategoryDialog
-                                val dialog = AddSubCategoryDialog()
-                                val bundle = Bundle()
-                                bundle.putString("CategoryNames", ListAndStringConverter.listToString(listOfCategoryNames))
-                                dialog.arguments = bundle
-                                dialog.show(parentFragmentManager, "ADD_SUB_CATEGORY_DIALOG")
-                            } else{
-                                Snackbar.make(binding.root, "To create a subcategory create a category", Snackbar.LENGTH_SHORT).show()
-                            }
-                        }
-                        "Image" -> {
-                            if(listOfCategoryNames.isNotEmpty()){
-                                //User wants to add images
-                                //Launch the AddImagesDialog
-                                val bundle = Bundle()
-                                bundle.putString("CategoryNames", ListAndStringConverter.listToString(listOfCategoryNames))
-                                val dialog = AddImagesDialog()
-                                dialog.arguments = bundle
-                                dialog.show(parentFragmentManager, "ADD_IMAGES_DIALOG")
-                            } else{
-                                Snackbar.make(binding.root, "To add images create a subcategory first", Snackbar.LENGTH_SHORT).show()
-                            }
+                    }
+                    "Image" -> {
+                        if (listOfCategoryNames.isNotEmpty()) {
+                            //User wants to add images
+                            //Launch the AddImagesDialog
+                            val bundle = Bundle()
+                            bundle.putString(
+                                "CategoryNames",
+                                ListAndStringConverter.listToString(listOfCategoryNames)
+                            )
+                            val dialog = AddImagesDialog()
+                            dialog.arguments = bundle
+                            dialog.show(parentFragmentManager, "ADD_IMAGES_DIALOG")
+                        } else {
+                            Snackbar.make(
+                                binding.root,
+                                "To add images create a subcategory first",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
             }
-        )
+        }
 
         //AddCategoryDialog
         parentFragmentManager.setFragmentResultListener(
             keyAddCategoryDialog,
-            viewLifecycleOwner,
-            {requestKey, result ->
-                if(requestKey == keyAddCategoryDialog){
-                    result.getString("CategoryName")?.let {
-                        val categoryID: String = UUID.randomUUID().toString()
-                        val category = Category(categoryID = categoryID,
-                            categoryName =  it, subCategoryList = mutableListOf(), categoryImagePlaceholderUrl = "")
-                        homeViewModel.addCategory(category)
-                    }
+            viewLifecycleOwner
+        ) { requestKey, result ->
+            if (requestKey == keyAddCategoryDialog) {
+                result.getString("CategoryName")?.let {
+                    val categoryID: String = UUID.randomUUID().toString()
+                    val category = Category(
+                        categoryID = categoryID,
+                        categoryName = it,
+                        subCategoryList = mutableListOf(),
+                        categoryImagePlaceholderUrl = ""
+                    )
+                    homeViewModel.addCategory(category)
                 }
             }
-        )
+        }
 
         //AddSubCategoryDialog
         parentFragmentManager.setFragmentResultListener(
             keyAddSubCategoryDialog,
-            viewLifecycleOwner,
-            {requestKey, result ->
-                if(requestKey == keyAddSubCategoryDialog){
-                    if(result.getInt("CategoryIndex") >= 0){
-                        val category = listOfCategory[result.getInt("CategoryIndex")]
-                        val subCategoryID: String = UUID.randomUUID().toString()
-                        val subCategory= SubCategory(subCategoryID = subCategoryID,
-                                subCategoryName =  result.getString("SubCategoryName", ""),
-                                categoryName = category.categoryName,
-                                imageUrlList = mutableListOf(),
-                                subCategoryPlaceholderImageUrl = "")
-                        homeViewModel.addSubCategory(subCategory, category)
-                    }
+            viewLifecycleOwner
+        ) { requestKey, result ->
+            if (requestKey == keyAddSubCategoryDialog) {
+                if (result.getInt("CategoryIndex") >= 0) {
+                    val category = listOfCategory[result.getInt("CategoryIndex")]
+                    val subCategoryID: String = UUID.randomUUID().toString()
+                    val subCategory = SubCategory(
+                        subCategoryID = subCategoryID,
+                        subCategoryName = result.getString("SubCategoryName", ""),
+                        categoryName = category.categoryName,
+                        imageUrlList = mutableListOf(),
+                        subCategoryPlaceholderImageUrl = ""
+                    )
+                    homeViewModel.addSubCategory(subCategory, category)
                 }
             }
-        )
+        }
 
         //AddImagesDialog
         parentFragmentManager.setFragmentResultListener(
             keyAddImagesDialog,
-            viewLifecycleOwner,
-            {requestKey, result ->
-                if(requestKey == keyAddImagesDialog){
-                    val category = listOfCategory[result.getInt("CategoryIndex")]
-                    val subCategoryName = result.getString("SubCategoryName", category.subCategoryList[0])
-                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToUploadFragment(category.categoryName, subCategoryName))
-                }
+            viewLifecycleOwner
+        ) { requestKey, result ->
+            if (requestKey == keyAddImagesDialog) {
+                val category = listOfCategory[result.getInt("CategoryIndex")]
+                val subCategoryName =
+                    result.getString("SubCategoryName", category.subCategoryList[0])
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToUploadFragment(
+                        category.categoryName,
+                        subCategoryName
+                    )
+                )
             }
-        )
+        }
 
         //DeleteDialog
         parentFragmentManager.setFragmentResultListener(
             keyDeleteDialog,
-            viewLifecycleOwner,
-            {requestKey, result ->
-                if (requestKey == keyDeleteDialog){
-                    when(result.getInt("DeleteOption")){
-                        1 -> {
-                            homeViewModel.deleteCategory(userSelectedCategory)
-                        }
-                        2 -> {
-                            homeViewModel.deleteSubCategory(userSelectedCategory,
-                                result.getString("SubCategoryName", ""))
-                        }
-                        else -> {
-                            Toast.makeText(requireContext(), "Nothing to Delete", Toast.LENGTH_SHORT).show()
-                        }
+            viewLifecycleOwner
+        ){ requestKey, result ->
+            if (requestKey == keyDeleteDialog) {
+                when (result.getInt("DeleteOption")) {
+                    1 -> {
+                        homeViewModel.deleteCategory(userSelectedCategory)
+                    }
+                    2 -> {
+                        homeViewModel.deleteSubCategory(
+                            userSelectedCategory,
+                            result.getString("SubCategoryName", "")
+                        )
+                    }
+                    else -> {
+                        Toast.makeText(requireContext(), "Nothing to Delete", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
-        )
+        }
 
         return binding.root
     }

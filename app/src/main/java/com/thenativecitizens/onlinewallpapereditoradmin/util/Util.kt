@@ -2,7 +2,7 @@ package com.thenativecitizens.onlinewallpapereditoradmin.util
 
 
 //Converts List to String and String to List
-object ListAndStringConverter{
+object ListAndStringConverter {
     fun listToString(list: List<Any>): String{
         var str = ""
         if(list.isNotEmpty()){
@@ -14,5 +14,4 @@ object ListAndStringConverter{
         }
         return str
     }
-    //fun stringToList(): MutableList<String>
 }

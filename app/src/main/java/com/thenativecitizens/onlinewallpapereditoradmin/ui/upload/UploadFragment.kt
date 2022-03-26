@@ -18,11 +18,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.thenativecitizens.onlinewallpapereditoradmin.R
 import com.thenativecitizens.onlinewallpapereditoradmin.databinding.FragmentUploadBinding
 import com.thenativecitizens.onlinewallpapereditoradmin.ui.dialogs.UploadImageDialog
-import com.thenativecitizens.onlinewallpapereditoradmin.util.UploadedImage
+import com.thenativecitizens.onlinewallpapereditoradmin.model.UploadedImage
+import com.thenativecitizens.onlinewallpapereditoradmin.util.keyUploadImageDialog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-const val keyUploadImageDialog = "UPLOAD_IMAGE_DIALOG"
 
 
 @AndroidEntryPoint
@@ -141,20 +141,19 @@ class UploadFragment @Inject constructor() : Fragment() {
         //ParentFragment Result Listeners
         parentFragmentManager.setFragmentResultListener(
             keyUploadImageDialog,
-            viewLifecycleOwner,
-            {requestKey, result ->
-                if(requestKey == keyUploadImageDialog){
-                    val clickAction = result.getInt("ClickAction")
-                    if (clickAction >= 1){
-                        uploadViewModel.beginUpload(args.categoryName, args.subCategoryName)
-                        binding.uploadProgress.visibility = View.VISIBLE
-                    } else {
-                        //Use choose to cancel
-                        findNavController().popBackStack()
-                    }
+            viewLifecycleOwner
+        ) { requestKey, result ->
+            if (requestKey == keyUploadImageDialog) {
+                val clickAction = result.getInt("ClickAction")
+                if (clickAction >= 1) {
+                    uploadViewModel.beginUpload(args.categoryName, args.subCategoryName)
+                    binding.uploadProgress.visibility = View.VISIBLE
+                } else {
+                    //Use choose to cancel
+                    findNavController().popBackStack()
                 }
             }
-        )
+        }
 
         return binding.root
     }

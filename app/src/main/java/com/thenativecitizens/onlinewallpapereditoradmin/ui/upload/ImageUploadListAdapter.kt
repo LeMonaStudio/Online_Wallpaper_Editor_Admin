@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.thenativecitizens.onlinewallpapereditoradmin.R
 import com.thenativecitizens.onlinewallpapereditoradmin.databinding.ListImageUploadingViewBinding
-import com.thenativecitizens.onlinewallpapereditoradmin.util.UploadedImage
+import com.thenativecitizens.onlinewallpapereditoradmin.model.UploadedImage
 
 class ImageUploadListAdapter: RecyclerView.Adapter<ImageUploadListAdapter.ViewHolder>(){
 
@@ -45,7 +45,7 @@ class ImageUploadListAdapter: RecyclerView.Adapter<ImageUploadListAdapter.ViewHo
 
         fun bind(uploadedImage: UploadedImage, ctx: Context) {
             binding.imageName.text = uploadedImage.imageName
-            binding.uploadProgressText.text = ctx.getString(R.string.uploading_progress, "${uploadedImage.imageUploadProgress.toString()}%")
+            binding.uploadProgressText.text = ctx.getString(R.string.uploading_progress, "${uploadedImage.imageUploadProgress}%")
             val animator = ObjectAnimator.ofInt(binding.uploadProgressIndicator, "progress", uploadedImage.imageUploadProgress )
             animator.duration = 500
             animator.start()

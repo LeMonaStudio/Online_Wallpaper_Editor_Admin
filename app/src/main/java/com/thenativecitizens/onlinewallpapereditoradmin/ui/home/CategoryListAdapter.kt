@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.thenativecitizens.onlinewallpapereditoradmin.R
 import com.thenativecitizens.onlinewallpapereditoradmin.databinding.ListCategoriesViewBinding
-import com.thenativecitizens.onlinewallpapereditoradmin.util.Category
+import com.thenativecitizens.onlinewallpapereditoradmin.model.Category
 
 class CategoryListAdapter(private val listener: CategoryListListener): RecyclerView.Adapter<CategoryListAdapter.ViewHolder>(){
 
